@@ -20,42 +20,36 @@ object Text {
 
     val result: List[PrintChar] = align match {
       case Left =>
-        lines
-          // ListのインデックスがほしいときはzipWithIndexを使います。但しindexは0から始まります。
-          .zipWithIndex
-          .flatMap {
-            case (line, rowIndex) =>
-              val rowNumber = rowIndex + 1
-              line.zipWithIndex.map {
-                case (char, columnIndex) =>
-                  val columnNumber = columnIndex + 1
-                  PrintChar(
-                    char.toString,
-                    widthUnit * columnNumber - widthUnitCenter,
-                    heightUnit * rowNumber - heightUnitCenter,
-                    maxWidth
-                  )
-              }
-          }
-      case Center =>
-        lines.zipWithIndex
-          .flatMap {
-            case (line, rowIndex) =>
-              val rowNumber = rowIndex + 1
-              val lineWidth = widthUnit * line.length
-              val margin = (side - lineWidth) / 2
-              line.zipWithIndex.map {
-                case (char, columnIndex) =>
-                  val columnNumber = columnIndex + 1
-                  PrintChar(
-                    char.toString,
-                    margin + widthUnit * columnNumber - widthUnitCenter,
-                    heightUnit * rowNumber - heightUnitCenter,
-                    maxWidth
-                  )
-              }
-          }
+        for {
+          (line, rowIndex) <- lines.zipWithIndex
+          (char, columnIndex) <- line.zipWithIndex
+        } yield {
+          val rowNumber = rowIndex + 1
+          val columnNumber = columnIndex + 1
+          PrintChar(
+            char.toString,
+            widthUnit * columnNumber - widthUnitCenter,
+            heightUnit * rowNumber - heightUnitCenter,
+            maxWidth
+          )
+        }
 
+      case Center =>
+        for {
+          (line, rowIndex) <- lines.zipWithIndex
+          (char, columnIndex) <- line.zipWithIndex
+        } yield {
+          val rowNumber = rowIndex + 1
+          val lineWidth = widthUnit * line.length
+          val margin = (side - lineWidth) / 2
+          val columnNumber = columnIndex + 1
+          PrintChar(
+            char.toString,
+            margin + widthUnit * columnNumber - widthUnitCenter,
+            heightUnit * rowNumber - heightUnitCenter,
+            maxWidth
+          )
+        }
     }
 
     result
