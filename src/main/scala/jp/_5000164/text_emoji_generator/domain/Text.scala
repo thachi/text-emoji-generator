@@ -11,7 +11,7 @@ object Text {
     val side = 128
     val maxLength = lines.map(_.length).max
     val maxRow = lines.length
-    val maxWidth = side / (if (maxLength > maxRow) maxLength else maxRow)
+    val maxWidth = side / Math.max(maxLength, maxRow)
 
     val heightUnit = side / maxRow
     val heightUnitCenter = heightUnit / 2
