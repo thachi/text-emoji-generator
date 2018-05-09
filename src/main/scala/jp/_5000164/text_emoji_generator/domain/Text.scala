@@ -18,49 +18,47 @@ object Text {
     val widthUnit = side / maxLength
     val widthUnitCenter = widthUnit / 2
 
-    var result: List[PrintChar] = List()
-
-    align match {
+    val result: List[PrintChar] = align match {
       case Left =>
         lines
           // ListのインデックスがほしいときはzipWithIndexを使います。但しindexは0から始まります。
           .zipWithIndex
-          .foreach {
+          .flatMap {
             case (line, rowIndex) =>
               val rowNumber = rowIndex + 1
-              line.zipWithIndex.foreach {
+              line.zipWithIndex.map {
                 case (char, columnIndex) =>
                   val columnNumber = columnIndex + 1
-                  result = PrintChar(
+                  PrintChar(
                     char.toString,
                     widthUnit * columnNumber - widthUnitCenter,
                     heightUnit * rowNumber - heightUnitCenter,
                     maxWidth
-                  ) :: result
+                  )
               }
           }
       case Center =>
         lines.zipWithIndex
-          .foreach {
+          .flatMap {
             case (line, rowIndex) =>
               val rowNumber = rowIndex + 1
               val lineWidth = widthUnit * line.length
               val margin = (side - lineWidth) / 2
-              line.zipWithIndex.foreach {
+              line.zipWithIndex.map {
                 case (char, columnIndex) =>
                   val columnNumber = columnIndex + 1
-                  result = PrintChar(
+                  PrintChar(
                     char.toString,
                     margin + widthUnit * columnNumber - widthUnitCenter,
                     heightUnit * rowNumber - heightUnitCenter,
                     maxWidth
-                  ) :: result
+                  )
               }
           }
 
     }
 
-    result.reverse
+    result
   }
 }
 
