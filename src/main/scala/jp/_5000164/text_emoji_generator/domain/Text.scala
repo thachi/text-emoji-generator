@@ -25,8 +25,8 @@ object Text {
       maxWidth
     )
 
-    val toPrintCharForAlignRight = (line: String, char: Char, rowIndex: Int, columnIndex: Int) => {
-      val lineWidth = widthUnit * line.length
+    val toPrintCharForAlignRight = (lineLength: Int, char: Char, rowIndex: Int, columnIndex: Int) => {
+      val lineWidth = widthUnit * lineLength
       val margin = (side - lineWidth) / 2
       PrintChar(
         char.toString,
@@ -47,7 +47,7 @@ object Text {
         for {
           (line, rowIndex) <- lines.zipWithIndex
           (char, columnIndex) <- line.zipWithIndex
-        } yield toPrintCharForAlignRight(line, char, rowIndex, columnIndex)
+        } yield toPrintCharForAlignRight(line.length, char, rowIndex, columnIndex)
     }
   }
 }
