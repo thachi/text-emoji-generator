@@ -20,22 +20,24 @@ object Text {
       val widthUnit = side / maxLength
       val widthUnitCenter = widthUnit / 2
 
-      val toPrintCharForAlignLeft = (_: Int, char: Char, rowIndex: Int, columnIndex: Int) => PrintChar(
-        char.toString,
-        widthUnit * columnIndex + widthUnitCenter,
-        heightUnit * rowIndex + heightUnitCenter,
-        maxWidth
-      )
 
-      val toPrintCharForAlignCenter = (lineLength: Int, char: Char, rowIndex: Int, columnIndex: Int) => {
-        val lineWidth = widthUnit * lineLength
-        val margin = (side - lineWidth) / 2
+      def toPointChar(margin: Int, char: Char, rowIndex: Int, columnIndex: Int) = {
         PrintChar(
           char.toString,
           margin + widthUnit * columnIndex + widthUnitCenter,
           heightUnit * rowIndex + heightUnitCenter,
           maxWidth
         )
+      }
+
+      val toPrintCharForAlignLeft = (_: Int, char: Char, rowIndex: Int, columnIndex: Int) => {
+        toPointChar(0, char, rowIndex, columnIndex)
+      }
+
+      val toPrintCharForAlignCenter = (lineLength: Int, char: Char, rowIndex: Int, columnIndex: Int) => {
+        val lineWidth = widthUnit * lineLength
+        val margin = (side - lineWidth) / 2
+        toPointChar(margin, char, rowIndex, columnIndex)
       }
       align match {
         case Left => toPrintCharForAlignLeft
