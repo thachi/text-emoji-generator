@@ -24,12 +24,10 @@ object Text {
           (line, rowIndex) <- lines.zipWithIndex
           (char, columnIndex) <- line.zipWithIndex
         } yield {
-          val rowNumber = rowIndex + 1
-          val columnNumber = columnIndex + 1
           PrintChar(
             char.toString,
-            widthUnit * columnNumber - widthUnitCenter,
-            heightUnit * rowNumber - heightUnitCenter,
+            widthUnit * columnIndex + widthUnitCenter,
+            heightUnit * rowIndex + heightUnitCenter,
             maxWidth
           )
         }
@@ -39,14 +37,12 @@ object Text {
           (line, rowIndex) <- lines.zipWithIndex
           (char, columnIndex) <- line.zipWithIndex
         } yield {
-          val rowNumber = rowIndex + 1
           val lineWidth = widthUnit * line.length
           val margin = (side - lineWidth) / 2
-          val columnNumber = columnIndex + 1
           PrintChar(
             char.toString,
-            margin + widthUnit * columnNumber - widthUnitCenter,
-            heightUnit * rowNumber - heightUnitCenter,
+            margin + widthUnit * columnIndex + widthUnitCenter,
+            heightUnit * rowIndex + heightUnitCenter,
             maxWidth
           )
         }
