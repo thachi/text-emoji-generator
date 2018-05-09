@@ -18,34 +18,36 @@ object Text {
     val widthUnit = side / maxLength
     val widthUnitCenter = widthUnit / 2
 
-    val toPrintChar = (char: Char, rowIndex: Int, columnIndex: Int) => PrintChar(
+    val toPrintCharForAlignLeft = (char: Char, rowIndex: Int, columnIndex: Int) => PrintChar(
       char.toString,
       widthUnit * columnIndex + widthUnitCenter,
       heightUnit * rowIndex + heightUnitCenter,
       maxWidth
     )
 
+    val toPrintCharForAlignRight = (line: String, char: Char, rowIndex: Int, columnIndex: Int) => {
+      val lineWidth = widthUnit * line.length
+      val margin = (side - lineWidth) / 2
+      PrintChar(
+        char.toString,
+        margin + widthUnit * columnIndex + widthUnitCenter,
+        heightUnit * rowIndex + heightUnitCenter,
+        maxWidth
+      )
+    }
+
     align match {
       case Left =>
         for {
           (line, rowIndex) <- lines.zipWithIndex
           (char, columnIndex) <- line.zipWithIndex
-        } yield toPrintChar(char, rowIndex, columnIndex)
+        } yield toPrintCharForAlignLeft(char, rowIndex, columnIndex)
 
       case Center =>
         for {
           (line, rowIndex) <- lines.zipWithIndex
           (char, columnIndex) <- line.zipWithIndex
-        } yield {
-          val lineWidth = widthUnit * line.length
-          val margin = (side - lineWidth) / 2
-          PrintChar(
-            char.toString,
-            margin + widthUnit * columnIndex + widthUnitCenter,
-            heightUnit * rowIndex + heightUnitCenter,
-            maxWidth
-          )
-        }
+        } yield toPrintCharForAlignRight(line, char, rowIndex, columnIndex)
     }
   }
 }
