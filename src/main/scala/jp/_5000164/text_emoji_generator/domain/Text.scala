@@ -18,19 +18,19 @@ object Text {
     val widthUnit = side / maxLength
     val widthUnitCenter = widthUnit / 2
 
+    val toPrintChar = (char: Char, rowIndex: Int, columnIndex: Int) => PrintChar(
+      char.toString,
+      widthUnit * columnIndex + widthUnitCenter,
+      heightUnit * rowIndex + heightUnitCenter,
+      maxWidth
+    )
+
     align match {
       case Left =>
         for {
           (line, rowIndex) <- lines.zipWithIndex
           (char, columnIndex) <- line.zipWithIndex
-        } yield {
-          PrintChar(
-            char.toString,
-            widthUnit * columnIndex + widthUnitCenter,
-            heightUnit * rowIndex + heightUnitCenter,
-            maxWidth
-          )
-        }
+        } yield toPrintChar(char, rowIndex, columnIndex)
 
       case Center =>
         for {
