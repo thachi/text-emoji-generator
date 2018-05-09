@@ -22,37 +22,42 @@ object Text {
 
     align match {
       case Left =>
-        var rowNumber = 1
-        for (line <- lines) {
-          var columnNumber = 1
-          for (char <- line) {
-            result = PrintChar(
-              char.toString,
-              widthUnit * columnNumber - widthUnitCenter,
-              heightUnit * rowNumber - heightUnitCenter,
-              maxWidth
-            ) :: result
-            columnNumber += 1
+        lines
+          // ListのインデックスがほしいときはzipWithIndexを使います。但しindexは0から始まります。
+          .zipWithIndex
+          .foreach {
+            case (line, rowIndex) =>
+              val rowNumber = rowIndex + 1
+              line.zipWithIndex.foreach {
+                case (char, columnIndex) =>
+                  val columnNumber = columnIndex + 1
+                  result = PrintChar(
+                    char.toString,
+                    widthUnit * columnNumber - widthUnitCenter,
+                    heightUnit * rowNumber - heightUnitCenter,
+                    maxWidth
+                  ) :: result
+              }
           }
-          rowNumber += 1
-        }
       case Center =>
-        var rowNumber = 1
-        for (line <- lines) {
-          val lineWidth = widthUnit * line.length
-          val margin = (side - lineWidth) / 2
-          var columnNumber = 1
-          for (char <- line) {
-            result = PrintChar(
-              char.toString,
-              margin + widthUnit * columnNumber - widthUnitCenter,
-              heightUnit * rowNumber - heightUnitCenter,
-              maxWidth
-            ) :: result
-            columnNumber += 1
+        lines.zipWithIndex
+          .foreach {
+            case (line, rowIndex) =>
+              val rowNumber = rowIndex + 1
+              val lineWidth = widthUnit * line.length
+              val margin = (side - lineWidth) / 2
+              line.zipWithIndex.foreach {
+                case (char, columnIndex) =>
+                  val columnNumber = columnIndex + 1
+                  result = PrintChar(
+                    char.toString,
+                    margin + widthUnit * columnNumber - widthUnitCenter,
+                    heightUnit * rowNumber - heightUnitCenter,
+                    maxWidth
+                  ) :: result
+              }
           }
-          rowNumber += 1
-        }
+
     }
 
     result.reverse
