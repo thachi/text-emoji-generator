@@ -18,7 +18,7 @@ object Text {
     val widthUnit = side / maxLength
     val widthUnitCenter = widthUnit / 2
 
-    val result: List[PrintChar] = align match {
+    align match {
       case Left =>
         for {
           (line, rowIndex) <- lines.zipWithIndex
@@ -47,8 +47,6 @@ object Text {
           )
         }
     }
-
-    result
   }
 }
 
